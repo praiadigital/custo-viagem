@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Custo Viagem — quanto custa chegar na praia?</title>
+<meta name="description" content="Pedágio + combustível + alimentação: o custo real da viagem para cada cidade do litoral saindo de SP. Satélite da rede praia.digital">
+<style>
+body{margin:0;font-family:system-ui,sans-serif;background:#eff6ff;color:#172554;min-height:100vh}
+header{padding:24px;text-align:center;background:linear-gradient(120deg,#1d4ed8,#60a5fa);color:#fff}
+nav a{color:#dbeafe;margin:0 8px;text-decoration:none;font-size:14px;font-weight:600}
+.wrap{max-width:700px;margin:auto;padding:24px}
+.panel{background:#fff;border-radius:16px;padding:22px;margin-bottom:16px;box-shadow:0 6px 18px rgba(29,78,216,.1)}
+label{display:block;margin:10px 0 4px;font-weight:600}
+input,select{width:100%;padding:12px;border-radius:10px;border:2px solid #bfdbfe;font-size:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cid{display:flex;justify-content:space-between;align-items:center;background:#eff6ff;border-radius:12px;padding:12px 16px;margin:8px 0}
+.cid b{color:#1d4ed8}
+.total{text-align:center;font-size:20px;background:#dbeafe;border-radius:14px;padding:16px;margin-top:14px}
+.total b{color:#1d4ed8;font-size:28px;display:block}
+footer{padding:20px;text-align:center;font-size:13px}
+footer a{color:#1d4ed8}
+</style></head>
+<body>
+<header><h1>🚗 Custo Viagem</h1><p>Pedágio + combustível + parada: o preço real de chegar na areia</p>
+<nav><a href="https://praia.digital">Praia Digital</a><a href="https://praia.digital/roteiro-fds">Roteiro FDS</a><a href="https://praia.digital/contagem-praia">Contagem pra Praia</a><a href="https://praia.digital/apps">Todos os apps</a></nav></header>
+<div class="wrap"><div class="panel">
+<label>🏙️ Saindo de</label><select id="origem" onchange="calc()"><option value="0">São Paulo (capital)</option><option value="40">Campinas (+40km)</option><option value="-60">São José dos Campos (mais perto do litoral norte)</option></select>
+<div class="row"><div><label>⛽ Consumo (km/l)</label><input type="number" id="cons" value="12" oninput="calc()"></div>
+<div><label>💲 Preço do combustível (R$/l)</label><input type="number" id="preco" value="5.60" step="0.01" oninput="calc()"></div></div>
+<div class="row"><div><label>🍔 Paradas/alimentação (R$ por trecho)</label><input type="number" id="food" value="60" oninput="calc()"></div>
+<div><label>🔁 Ida e volta?</label><select id="iv" onchange="calc()"><option value="2">Sim</option><option value="1">Só ida</option></select></div></div>
+<div id="lista"></div></div>
+</div>
+<footer>Rede <a href="https://praia.digital">praia.digital</a> · <a href="https://praia.digital/mudanca-praia">Mudança pra Praia</a> · <a href="https://praia.digital/marea">Maréa</a> · <a href="https://praia.digital/clima-litoral">Clima Litoral</a></footer>
+<script>
+const cidades=[['Santos',85,30],['Guarujá',95,42],['Praia Grande',75,30],['São Sebastião',200,45],['Caraguatatuba',175,40],['Ubatuba',230,45]];
+function fmt(v){return 'R$ '+v.toFixed(2).replace('.',',')}
+function calc(){
+const off=+origem.value,cons=+cons.value,p=+preco.value,f=+food.value,iv=+iv.value;
+lista.innerHTML=cidades.map(c=>{const km=Math.max(20,c[1]+off);const comb=km/cons*p;const total=(comb+c[2]+f)*iv;
+return `<div class="cid"><span><b>${c[0]}</b><br><small>${km}km · pedágio ~R$ ${c[2]}</small></span><b>${fmt(total)}</b></div>`}).join('')+'<div class="total">💡 Dono de imóvel na praia? Some isso ao custo por uso. Viajante frequente? Veja <a href="https://praia.digital/plano-litoral">Plano Litoral</a>.</div>';}
+calc();
+</script></body></html>
